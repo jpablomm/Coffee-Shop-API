@@ -19,6 +19,7 @@ db_drop_and_create_all()
 
 @app.route('/drinks')
 def get_drinks():
+    """Fetch and return all drinks."""
     all_drinks = Drink.query.all()
     
     drinks = [drink.short() for drink in all_drinks]
@@ -34,6 +35,7 @@ def get_drinks():
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_detail(jwt):
+    """Fetch and return all drinks with details."""
     try:
         all_drinks = Drink.query.all()
         drinks = [drink.long() for drink in all_drinks]
@@ -49,6 +51,7 @@ def get_drinks_detail(jwt):
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def create_drink(jwt):
+    """Create new drink."""
     data = request.get_json()
     title = data['title']
     recipe = data['recipe']
@@ -71,6 +74,7 @@ def create_drink(jwt):
 @app.route('/drinks/<int:drink_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drink(jwt, drink_id):
+    """Update drink."""
     data = request.get_json()
     new_title = data.get('title', None)
     new_recipe = data.get('recipe', None)
@@ -99,6 +103,7 @@ def update_drink(jwt, drink_id):
 @app.route('/drinks/<int:drink_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(jwt, drink_id):
+    """Delete drink."""
     drink = Drink.query.filter(Drink.id == drink_id).first()
 
     if drink is None:
